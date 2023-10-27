@@ -1,83 +1,28 @@
-// const http = require('http')
-const fs = require('fs');
 const express = require('express');
 const morgan  = require('morgan') // third party middle ware
-
-const index = fs.readFileSync('index.html', 'utf-8');
-const data = JSON.parse(fs.readFileSync('data.json', 'utf-8'));
-const products = data.products;
-
-const port = 8080;
 const server = express();
 
 
+const port = 8080;
 
+// body parser
 server.use(express.static('public'))
-
 server.use(morgan('default'))
-
 server.use(express.json())
 
 
+const productController = require('./controller/product')
 
+const productRouter = express.Router()
 
-// 1  Create POST /products    C R U D
-server.post('/products', (req, res) => {
-    // reading the created product in the body
-    // POST -> body -> raw (json) -> [req.body]
-    const new_product = req.body
-    console.log(JSON.stringify(new_product))
-    products.push(new_product)
-    res.json(new_product)
-})
+// MVC model-view-controller
 
-
-    
-
-// 2 Read GET 
-server.get('/products', (req, res) => {
-    res.json(products)
-})
-
-// 3 Update 
-// 3.1 PUT
-server.put('/products/:id', (req, res) => {
-    const id = +req.params.id
-    // const product = products.find(p => p.id === id)
-    const p_idx = products.findIndex((p) => p.id === id)
-    products.splice(p_idx, 1, {id:id,...req.body })
-    res.status(201).json(products);
-})
-
-// 3.2 PATCH
-server.patch('/products/:id', (req, res) => {
-    const id = +req.params.id
-    // const product = products.find(p => p.id === id)
-    const p_idx = products.findIndex((p) => p.id === id)
-    const product = products[p_idx]
-    products.splice(p_idx, 1, {id:id, ...product,...req.body })
-    res.status(201).json(products);
-})
-
-// 4 delete -  you can delete only 1 at a time in REST
-server.delete('/products/:id', (req, res) => {
-    const id = +req.params.id
-    // const product = products.find(p => p.id === id)
-    const p_idx = products.findIndex((p) => p.id === id)
-    const product = products[p_idx]
-    products.splice(p_idx, 1)
-    res.status(201).json(product) // sending the delted product
-})
-
-
-// Read GET /products/:id
-server.get('/products/:id', (req, res) => {
-    console.log(req.params)
-    const id = +req.params.id
-    const product = products.find((p) => p.id === id)
-    res.json(product)
-})
-
+server.post('/products', productController.createProduct)
+server.get('/products', productController.getAllProducts)
+server.get('/products/:id', productController.getProduct)
+server.put('/products/:id', productController.replaceProduct)
+server.patch('/products/:id', productController.updateProduct)
+server.delete('/products/:id', productController.deleteProduct)
 
 
 // Error Handling Middleware
