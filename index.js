@@ -40,13 +40,34 @@ server.get('/products', (req, res) => {
 })
 
 // 3 Update 
-server.put('./products/:id', (req, res) => {
+// 3.1 PUT
+server.put('/products/:id', (req, res) => {
     const id = +req.params.id
-    const product = products.find(p => p.id === id)
-    res.json(product)
+    // const product = products.find(p => p.id === id)
+    const p_idx = products.findIndex((p) => p.id === id)
+    products.splice(p_idx, 1, {id:id,...req.body })
+    res.status(201).json(products);
 })
 
-// 4 delete
+// 3.2 PATCH
+server.patch('/products/:id', (req, res) => {
+    const id = +req.params.id
+    // const product = products.find(p => p.id === id)
+    const p_idx = products.findIndex((p) => p.id === id)
+    const product = products[p_idx]
+    products.splice(p_idx, 1, {id:id, ...product,...req.body })
+    res.status(201).json(products);
+})
+
+// 4 delete -  you can delete only 1 at a time in REST
+server.delete('/products/:id', (req, res) => {
+    const id = +req.params.id
+    // const product = products.find(p => p.id === id)
+    const p_idx = products.findIndex((p) => p.id === id)
+    const product = products[p_idx]
+    products.splice(p_idx, 1)
+    res.status(201).json(product) // sending the delted product
+})
 
 
 // Read GET /products/:id
