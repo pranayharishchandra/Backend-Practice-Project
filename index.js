@@ -1,28 +1,18 @@
+const port = 8080;
+
 const express = require('express');
 const morgan  = require('morgan') // third party middle ware
-const server = express();
+const server = express(); // never make 2 servers in a single app
 
-
-const port = 8080;
+const productRouter = require('./routes/product')
+const userRouter    = require('./routes/user')
 
 // body parser
 server.use(express.static('public'))
 server.use(morgan('default'))
 server.use(express.json())
-
-
-const productController = require('./controller/product')
-
-const productRouter = express.Router()
-
-// MVC model-view-controller
-
-server.post('/products', productController.createProduct)
-server.get('/products', productController.getAllProducts)
-server.get('/products/:id', productController.getProduct)
-server.put('/products/:id', productController.replaceProduct)
-server.patch('/products/:id', productController.updateProduct)
-server.delete('/products/:id', productController.deleteProduct)
+server.use('/products', productRouter.router)
+server.use('/users',    userRouter.router)
 
 
 // Error Handling Middleware
