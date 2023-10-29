@@ -4,6 +4,7 @@ const express = require('express');
 const morgan  = require('morgan') // third party middle ware
 const server = express(); // never make 2 servers in a single app
 
+// routes
 const productRouter = require('./routes/product')
 const userRouter    = require('./routes/user')
 
