@@ -101,6 +101,13 @@ db.products.updateOne(
 // nothing like replaceMany, since could be dangerous
 
 
+================ DELETE ================
+// deleteOne / deleteMany
+db.products.deleteOne(
+    {id: 1},
+    {price: 9999}
+)
+
 
 
 
