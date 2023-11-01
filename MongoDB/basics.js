@@ -110,12 +110,10 @@ db.products.deleteOne(
 
 
 
-
-
-
-
-
-
-
+================ CONNECTION TO CLI ================
+mongosh "mongodb+srv://db2.kfbnmy3.mongodb.net/" --apiVersion 1 --username user0001
+mongodb+srv://user0001:user0001@db2.kfbnmy3.mongodb.net/
 
 */
+
+
